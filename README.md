@@ -44,7 +44,7 @@ If you work with Ensemble Workflow it is recommended to familiarize yourself wit
 It's the basic and first request you need to execute after logging in (by authentication method you configured for REST web application). It returns basic information unassigned tasks or tasks assigned to a current user. 
 You can provide two parameters: 
 
-- `count` - number of records to return (defaults to 100) and `maxId` 
+- `count` - number of records to return (defaults to 100)
 - `maxId` - last id from previous page (if left empty all tasks would be returned)
 
 Tasks are returned in reverse chronological order, newest to oldest. Here's how it looks like:

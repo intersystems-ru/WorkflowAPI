@@ -92,8 +92,8 @@ ClassMethod getTask(id) As %Status
 			INTO   :id, :isNew, :priority,        :subject,       :message,       :timeCreated, :role,     :task, :actions,       :formFields
 			FROM EnsLib_Workflow.Worklist
 			WHERE (%ID = :id) AND (UserName = USER))
-	If (SQLCODE = 0) {
-		Write "{""id"":""", id,""",",
+	if (SQLCODE = 0) {
+		write "{""id"":""", id,""",",
 		 			"""isNew"":",isNew,",",
 		 			"""priority"":",priority,",",
 		 			"""subject"":""",$zcvt(subject,"O", "JSON"),""",",
@@ -103,17 +103,17 @@ ClassMethod getTask(id) As %Status
 		 			"""actions"":""",actions,""",",
 		 			"""formFields"":{"
 		 
-		 Merge fieldValues = ^Ens.MessageBodyD(task, "%FormValues")	
-		 Set fieldCount = $l(formFields, ",")
-		 For field = 1:1:fieldCount {
-			 Set fieldName = $p(formFields, ",", field)
-			 Set fieldValue = $g(fieldValues(fieldName))
-			 Write """",$zcvt(fieldName,"O", "JSON"),""":""",$zcvt(fieldValue,"O", "JSON"),""""
-			 Write:(field<fieldCount) ","
+		merge fieldValues = ^Ens.MessageBodyD(task, "%FormValues")	
+		set fieldCount = $l(formFields, ",")
+		for field = 1:1:fieldCount {
+			set fieldName = $p(formFields, ",", field)
+			set fieldValue = $g(fieldValues(fieldName))
+			write """",$zcvt(fieldName,"O", "JSON"),""":""",$zcvt(fieldValue,"O", "JSON"),""""
+			write:(field<fieldCount) ","
 		 }
-		 Write "}}"
-	} Else {
-		Set sc = $$$ERROR($$$SQLError, SQLCODE, $g(%msg))
+		 write "}}"
+	} else {
+		set sc = $$$ERROR($$$SQLError, SQLCODE, $g(%msg))
 	}
 	
 	quit sc
