@@ -1,6 +1,6 @@
-EnsembleWorkflow
+WorkflowAPI
 ==============
-Restful web API for InterSystems Data Platforms Workflow. This is the latest version, previous projects are deprecated and should not be used in new projects.
+Restful API for InterSystems Data Platforms Workflow. This is the latest version, previous projects are deprecated and should not be used in new projects.
 
 ## Installation
 1. Import and compile this [isc.wf.REST](https://raw.githubusercontent.com/intersystems-ru/WorkflowAPI/master/isc/wf/REST.cls).
