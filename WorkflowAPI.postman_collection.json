@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "0ef6c416-295c-4e85-86cd-cf15c53189a8",
+		"name": "WorkflowAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{app}}/tasks",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{app}}",
+						"tasks"
+					]
+				},
+				"description": "Get tasks list"
+			},
+			"response": []
+		},
+		{
+			"name": "tasks - pagination",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{app}}/tasks/:count/:maxId",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{app}}",
+						"tasks",
+						":count",
+						":maxId"
+					],
+					"variable": [
+						{
+							"key": "count",
+							"value": "100"
+						},
+						{
+							"key": "maxId",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "task",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{app}}/task/:id",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{app}}",
+						"task",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "308||dev"
+						}
+					]
+				},
+				"description": "Get tasks list"
+			},
+			"response": []
+		},
+		{
+			"name": "task",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"action\": \"$Save\", \n\t\"formFields\": {\n\t\t\"Comments\": \"5555\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{app}}/task/:id",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{app}}",
+						"task",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "308||dev"
+						}
+					]
+				},
+				"description": "Get tasks list"
+			},
+			"response": []
+		},
+		{
+			"name": "test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{app}}/tasks",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{app}}",
+						"tasks"
+					]
+				},
+				"description": "Get tasks list"
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{app}}/tasks/logout",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{app}}",
+						"tasks",
+						"logout"
+					]
+				},
+				"description": "Get tasks list"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{pass}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{user}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "83d4b0d8-1a1b-4b9f-9100-b29422d31bd7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "54b1e46b-a3e6-45d1-a8d0-b72120603ffb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f518eeb0-c612-4dfb-82a7-349b65c22a5e",
+			"key": "user",
+			"value": "_SYSTEM",
+			"type": "string"
+		},
+		{
+			"id": "19db3efe-1219-4fa1-9c09-59b65146e1f7",
+			"key": "pass",
+			"value": "SYS",
+			"type": "string"
+		},
+		{
+			"id": "d68be800-67af-4bc7-b416-325a0a298a0f",
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"id": "35b0bcb8-a585-4b3b-b43a-461dccd545b6",
+			"key": "port",
+			"value": "57773",
+			"type": "string"
+		},
+		{
+			"id": "64da587a-5360-4c72-8f91-97cb2779745a",
+			"key": "app",
+			"value": "/wf/api2",
+			"type": "string"
+		}
+	]
+}
