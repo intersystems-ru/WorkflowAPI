@@ -26,16 +26,16 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 ClassMethod logout() As %Status
 {
 	#dim %session As %CSP.Session
-	set st = %session.Logout(1)
+	set sc = %session.Logout(1)
 	set %session.EndSession = 1
-	return st
+	quit sc
 }
 
 /// Test method
 ClassMethod test() As %Status
 {
     write "{""Status"": ""OK""}"
-    return $$$OK
+    quit $$$OK
 }
 
 /// Get tasks. Supports pagination.
@@ -148,8 +148,8 @@ ClassMethod postTask(id As %String) As %Status
 /// Only Workflow users can use this api
 ClassMethod OnPreDispatch(pUrl As %String, pMethod As %String, ByRef pContinue As %Boolean) As %Status
 {
-	Set pContinue = ##class(EnsLib.Workflow.UserDefinition).%ExistsId($username)
-    Quit $$$OK
+	set pContinue = ##class(EnsLib.Workflow.UserDefinition).%ExistsId($username)
+    quit $$$OK
 }
 
 /// This method takes a status, renders it as json (if requested) and outputs the result
@@ -158,37 +158,36 @@ ClassMethod outputStatus(pSC As %Status) As %Status [ Internal ]
     #dim tSC As %Status = $$$OK
     #dim e As %Exception.AbstractException
     
-    Try {
+    try {
         
         #dim tJSON As %ZEN.proxyObject
     
-        If ..AcceptsContentType("application/json") {
+        if ..AcceptsContentType("application/json") {
         
-            Set %response.ContentType = ..#CONTENTTYPEJSON
+            set %response.ContentType = ..#CONTENTTYPEJSON
         
             #; Convert the exception to a status and render to JSON
-            Set tSC = ..StatusToProxyObject(pSC, .tJSON)
-            Set tJSON.stack = ..getDebugInfo()
-            If $$$ISERR(tSC) Quit
+            set tSC = ..StatusToProxyObject(pSC, .tJSON)
+            set tJSON.stack = ..getDebugInfo()
+            if $$$ISERR(tSC) Quit
 
             #; Write the JSON to the output device
-            Set tSC = tJSON.%ToJSON(, "aeloqutwc")
-            If $$$ISERR(tSC) Quit
+            set tSC = tJSON.%ToJSON(, "aeloqutwc")
+            if $$$ISERR(tSC) Quit
             
         } else {
             
             #; Set plain text
-            Set %response.ContentType = ..#CONTENTTYPETEXT
+            set %response.ContentType = ..#CONTENTTYPETEXT
             
             #; Write out a simple text message
-            Do ##class(%Exception.StatusException).CreateFromStatus(pSC).OutputToDevice()
+            do ##class(%Exception.StatusException).CreateFromStatus(pSC).OutputToDevice()
         }
         
-    } Catch (e) {
-        #; Oops
-        Set tSC = e.AsStatus()
+    } catch ex {
+        set tSC = ex.AsStatus()
     }
-    Quit $$$OK
+    quit $$$OK
 }
 
 ClassMethod getDebugInfo() As %ZEN.proxyObject
@@ -200,7 +199,7 @@ ClassMethod getDebugInfo() As %ZEN.proxyObject
 	set obj.response = %response
 	set obj.user = $username
 	
-	return obj
+	quit obj
 }
 
 ClassMethod getStackInfo() As %ListOfDataTypes
@@ -217,7 +216,7 @@ ClassMethod getStackInfo() As %ListOfDataTypes
 		do list.Insert(obj)
 	}
 	
-	return list
+	quit list
 }
 
 }
