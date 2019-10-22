@@ -104,9 +104,10 @@ ClassMethod getTask(id) As %Status
 		 			"""formFields"":{"
 		 
 		merge fieldValues = ^Ens.MessageBodyD(task, "%FormValues")	
-		set fieldCount = $l(formFields, ",")
+		set fieldCount = $case(formFields, "":0, :$l(formFields, ","))
 		for field = 1:1:fieldCount {
 			set fieldName = $p(formFields, ",", field)
+			continue:fieldName=""
 			set fieldValue = $g(fieldValues(fieldName))
 			write """",$zcvt(fieldName,"O", "JSON"),""":""",$zcvt(fieldValue,"O", "JSON"),""""
 			write:(field<fieldCount) ","
