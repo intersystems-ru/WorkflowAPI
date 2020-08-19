@@ -70,7 +70,7 @@ ClassMethod getTasks(count = 100, maxId = "") As %Status
 		 			"""priority"":",priority,",",
 		 			"""subject"":""", $zcvt(subject,"O", "JSON"),""",",
 		 			"""message"":""", $zcvt(message,"O", "JSON"),""",",
-		 			"""timeCreated"":""", timeCreated,""",",
+		 			"""timeCreated"":""", $tr(timeCreated, " ", "T") _ "Z",""",",
 		 			"""role"":""", role,"""}"
 		&sql(FETCH C1)
 	}
@@ -99,7 +99,7 @@ ClassMethod getTask(id) As %Status
 		 			"""priority"":",priority,",",
 		 			"""subject"":""",$zcvt(subject,"O", "JSON"),""",",
 		 			"""message"":""",$zcvt(message,"O", "JSON"),""",",
-		 			"""timeCreated"":""",timeCreated,""",",
+		 			"""timeCreated"":""", $tr(timeCreated, " ", "T") _ "Z",""",",
 		 			"""role"":""",role,""",",
 		 			"""actions"":""",actions,""",",
 		 			"""formFields"":{"
