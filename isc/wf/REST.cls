@@ -19,6 +19,7 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 
 <Route Url="/test" Method="GET" Call="test"/>
 <Route Url="/logout" Method="GET" Call="logout"/>
+<Route Url="/user-info" Method="GET" Call="getUserInfo"/>
 </Routes>
 }
 
@@ -65,7 +66,7 @@ ClassMethod getTasks(count = 100, maxId = "") As %Status
 			write ",",!
 		}
 		write "{""id"":""", id,""",",
-		 			"""isNew"":",isNew,",",
+		 			"""isNew"":",$case(isNew, $$$YES: "true", :"false"),",",
 		 			"""priority"":",priority,",",
 		 			"""subject"":""", $zcvt(subject,"O", "JSON"),""",",
 		 			"""message"":""", $zcvt(message,"O", "JSON"),""",",
@@ -94,7 +95,7 @@ ClassMethod getTask(id) As %Status
 			WHERE (%ID = :id) AND (UserName = USER))
 	if (SQLCODE = 0) {
 		write "{""id"":""", id,""",",
-		 			"""isNew"":",isNew,",",
+		 			"""isNew"":",$case(isNew, $$$YES: "true", :"false"),",",
 		 			"""priority"":",priority,",",
 		 			"""subject"":""",$zcvt(subject,"O", "JSON"),""",",
 		 			"""message"":""",$zcvt(message,"O", "JSON"),""",",
@@ -109,7 +110,14 @@ ClassMethod getTask(id) As %Status
 			set fieldName = $p(formFields, ",", field)
 			continue:fieldName=""
 			set fieldValue = $g(fieldValues(fieldName))
-			write """",$zcvt(fieldName,"O", "JSON"),""":""",$zcvt(fieldValue,"O", "JSON"),""""
+			
+			// Special handlers
+			// "$$$Handler": {"myLink":"link","myImg":"img"}
+			if fieldName = "$$$Handler" {
+				write """",$zcvt(fieldName,"O", "JSON"),""":",fieldValue
+			} else {
+				write """",$zcvt(fieldName,"O", "JSON"),""":""",$zcvt(fieldValue,"O", "JSON"),""""
+			}
 			write:(field<fieldCount) ","
 		 }
 		 write "}}"
@@ -151,6 +159,55 @@ ClassMethod OnPreDispatch(pUrl As %String, pMethod As %String, ByRef pContinue A
 {
 	set pContinue = ##class(EnsLib.Workflow.UserDefinition).%ExistsId($username)
     quit $$$OK
+}
+
+/// Called for a REST page in the event of a login being required
+ClassMethod Login(skipheader As %Boolean = 1) As %Status [ ProcedureBlock = 0 ]
+{
+    #dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+    
+    #dim tMatchURL As %String
+			$$$SysLog(3,"OAuth2","[%CSP.REST]","Login: %request.Method="_%request.Method)
+           
+    Try {
+        
+        #; Don't want the session token
+        Set %response.OutputSessionToken=0
+        
+        #; Also set language to prevent any attempt to call %response.MatchLanguage as this can cause PROTECT errors reading from ^IRIS.Msg global
+        If %response.Language="" Set %response.Language="en"
+        
+        Set tMatchURL=$Extract(%request.URL,$Length(%request.Application),*)
+      
+        #; Process CORS request
+        Set tSC=..ProcessCorsRequest(tMatchURL)
+        If $$$ISERR(tSC) Quit
+            
+        If %request.Method="OPTIONS" {
+            
+            #; We want to allow OPTIONS requests even if not authorized
+            Set tSC=..OnHandleOptionsRequest(tMatchURL)
+            If $$$ISERR(tSC) Quit
+         
+        } else {
+            
+            #; Set the Http Status
+            Set %response.Status=..#HTTP401UNAUTHORIZED
+            
+            #; We do not want Basic authentication
+            #; Do %response.SetHeader("WWW-Authenticate","Basic")
+        }
+        
+    } Catch (e) {
+        Set tSC=e.AsStatus()
+    }
+    
+    #; We need to manually write out the headers here because PAGE has not been called
+    Do %response.WriteHTTPHeader()
+        
+    #; Done
+    Quit tSC
 }
 
 /// This method takes a status, renders it as json (if requested) and outputs the result
@@ -218,6 +275,18 @@ ClassMethod getStackInfo() As %ListOfDataTypes
 	}
 	
 	quit list
+}
+
+/// Get user info
+ClassMethod getUserInfo() As %Status
+{
+	#dim %session As %CSP.Session
+	set user = {
+		"username": ($Username),
+		"timeout": (%session.AppTimeout)
+	}
+	write user.%ToJSON()
+	quit $$$OK
 }
 
 }
