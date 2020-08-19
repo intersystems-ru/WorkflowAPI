@@ -30,6 +30,7 @@
 
 <Route Url="/test" Method="GET" Call="test"/>
 <Route Url="/logout" Method="GET" Call="logout"/>
+<Route Url="/user-info" Method="GET" Call="getUserInfo"/>
 </Routes>
 ]]></Data>
 </XData>
@@ -331,6 +332,22 @@ This method takes a status, renders it as json (if requested) and outputs the re
 	}
 	
 	quit list
+]]></Implementation>
+</Method>
+
+<Method name="getUserInfo">
+<Description>
+Get user info</Description>
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	#dim %session As %CSP.Session
+	set user = {
+		"username": ($Username),
+		"timeout": (%session.AppTimeout)
+	}
+	write user.%ToJSON()
+	quit $$$OK
 ]]></Implementation>
 </Method>
 </Class>
