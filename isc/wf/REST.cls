@@ -7,6 +7,8 @@ Parameter CHARSET = "UTF-8";
 
 Parameter UseSession As Integer = 1;
 
+Parameter CONVERTINPUTSTREAM = 1;
+
 XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 {
 <Routes>
