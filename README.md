@@ -134,3 +134,7 @@ Here's an example of a user modifying `308||dev` task (by choosing Save action):
 	}
 }
 ```
+
+# Images and Links
+
+If some of your form fields are links and/or images, you can use a special form field: `$$$Handler`. Set it like this `{"myLink":"link","myImg":"img"}` where `myLink` is a name of a form field containig the link and `myImg` is a name of a form field containig the image. [WorkflowUI-ngx](https://github.com/intersystems-ru/workflowUI-ngx) would display them appropriately.
