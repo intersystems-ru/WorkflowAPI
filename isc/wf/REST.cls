@@ -51,8 +51,8 @@ ClassMethod getTasks(count = 100, maxId = "") As %Status
 	#dim isFirst As %Boolean = $$$YES
 	&sql(	DECLARE C1 CURSOR FOR
 			SELECT TOP :count 
-				 %ID,  IsNew,  Task->%Priority, Task->%Subject, Left(Task->%Message,25), TimeCreated,  RoleName
-			INTO :id, :isNew, :priority,        :subject,       :message,                :timeCreated, :role
+				 %ID,  IsNew,  Task->%Priority, Task->%Subject, Left(Task->%Message, 100), TimeCreated,  RoleName
+			INTO :id, :isNew, :priority,        :subject,       :message,                  :timeCreated, :role
 			FROM EnsLib_Workflow.Worklist
 			WHERE (UserName = USER) 
 				AND ((Task->TaskStatus_AssignedTo IS NULL) OR (Task->TaskStatus_AssignedTo = UserName))
