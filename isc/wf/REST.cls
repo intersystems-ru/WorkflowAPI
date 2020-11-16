@@ -160,6 +160,7 @@ ClassMethod postTask(id As %String) As %Status
 ClassMethod OnPreDispatch(pUrl As %String, pMethod As %String, ByRef pContinue As %Boolean) As %Status
 {
 	set pContinue = ##class(EnsLib.Workflow.UserDefinition).%ExistsId($username)
+	set:'pContinue %response.Status=..#HTTP403FORBIDDEN
     quit $$$OK
 }
 

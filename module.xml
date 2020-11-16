@@ -3,7 +3,7 @@
   <Document name="workflow-rest.ZPM">
     <Module>
       <Name>workflow-rest</Name>
-      <Version>1.1.0</Version>
+      <Version>1.1.1</Version>
       <Packaging>module</Packaging>
       <Resource Name="isc.PKG"/>
      
